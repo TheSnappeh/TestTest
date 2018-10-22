@@ -1,5 +1,6 @@
 import requests
 import bs4
+import json
 
 """ Includes all the global variables used throughout the program.
 
@@ -61,16 +62,23 @@ def html_grab(name):
 
 def setup():
     # CHECK IF THE FILE IS EMPTY, IF IT IS, WE HAVE TO GATHER INFO FIRST.
-    api_url = "https://api.coinmarketcap.com/v1/ticker/bitcoin/"
-    response = requests.get(api_url)
-    response_json = response.json()
-    dic = response_json[0]
+    json_file = open('data.json')
+    data = json.load(json_file)
+    if data[0]:
+        print("Empty. Getting appropriate information.")
+        api_url = "https://api.coinmarketcap.com/v1/ticker/bitcoin/"
+        response = requests.get(api_url)
+        response_json = response.json()
+        dic = response_json[0]
 
-    for parameters in dic:
-        param_list.append(parameters)
-    for crypto_currency in list_of_cryptos:
-        create_crypto(crypto_currency)
-        cryptos[crypto_currency] = {}
+        for parameters in dic:
+            data[0].append(parameters)
+        #  param_list.append(parameters)
+        for crypto_currency in list_of_cryptos:
+            create_crypto(crypto_currency)
+            cryptos[crypto_currency] = {}
+
+
 
 
 setup()
